@@ -13,6 +13,8 @@ import {
   Box,
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { Center } from '@mantine/core';
+
 
 const theme = createTheme({
   palette: {
@@ -37,6 +39,14 @@ const Form = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <Box
+        sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+
       <Container component="main" maxWidth="md">
         <Box
           sx={{
@@ -48,10 +58,14 @@ const Form = () => {
             padding: '20px',
             marginTop: '10px',
             backgroundColor: 'white',
+          
           }}
         >
-          <Typography variant="h4" color="primary" align="center" gutterBottom>
+          <Typography variant="h4" color="black" align="center" gutterBottom>
             Appointment Request Form
+          </Typography>
+          <Typography variant="h7" color="black" align="center" gutterBottom>
+          Let us know how we can help you!
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
             {/* Full Name Section */}
@@ -127,27 +141,34 @@ const Form = () => {
             </Grid>
 
             {/* Address Section */}
-            <Typography variant="h6" color="primary" className="mt-3" gutterBottom>
+            <Typography variant="h6" color="black" className="mt-3" gutterBottom>
               Address
             </Typography>
+            
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   {...register('streetAddress', { required: true })}
-                  label="Street Address"
+                  label=""
                   variant="outlined"
                   fullWidth
                   error={Boolean(errors.streetAddress)}
                   helperText={errors.streetAddress && 'Street Address is required'}
                 />
+                <Typography variant="body2" color="textSecondary">
+                  Street Address
+                </Typography>
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   {...register('streetAddressLine2')}
-                  label="Street Address Line 2"
+                  label=""
                   variant="outlined"
                   fullWidth
                 />
+                <Typography variant="body2" color="textSecondary">
+                  Street Address Line 2
+                </Typography>
               </Grid>
               <Grid item xs={6}>
                 <TextField
@@ -175,33 +196,49 @@ const Form = () => {
                   State/Province
                 </Typography>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <TextField
                   {...register('postalCode', { required: true })}
-                  label="Postal Code"
+                  label=""
                   variant="outlined"
                   fullWidth
                   error={Boolean(errors.postalCode)}
                   helperText={errors.postalCode && 'Postal Code is required'}
                 />
+                <Typography variant="body1" color="textSecondary">
+                  Postal/Zip Code
+                </Typography>
               </Grid>
+            </Grid>
+            
+
+            <Grid item xs={15}>
+              <Typography variant="body2" color="textSecondary">
+               {/* Empty Typography for spacing */}
+              </Typography>
             </Grid>
 
             {/* Additional Information Section */}
-            <Typography variant="h6" color="primary" className="mt-3" gutterBottom>
+            {/* <Typography variant="h6" color="primary" className="mt-3" gutterBottom>
               Additional Information
-            </Typography>
+            </Typography> */}
+            <Grid item xs={8}>
+            <Typography variant="h6" color="black">
+                  What services are you interested in?
+                </Typography>
             <TextField
               {...register('additionalInfo')}
-              label="What services are you interested in?"
+              label="Type here..."
               variant="outlined"
               fullWidth
               multiline
               rows={4}
+              
             />
+            </Grid>
 
-            <Typography variant="h6" color="primary" className="mt-3" gutterBottom>
-              Promotional Services
+            <Typography variant="h6" color="black" className="mt-3" gutterBottom>
+            Would you like to be notified about promotional services?
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
@@ -243,6 +280,7 @@ const Form = () => {
           </form>
         </Box>
       </Container>
+      </Box>
     </ThemeProvider>
   );
 };
