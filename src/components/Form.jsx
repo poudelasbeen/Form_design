@@ -170,7 +170,7 @@ const Form = () => {
                 </Grid>
               </Grid>
 
-              {/* Contact Number and Email Address Section */}
+              
               <Typography
                 variant="h6"
                 color="black"
@@ -216,7 +216,7 @@ const Form = () => {
                 </Grid>
               </Grid>
 
-              {/* Address Section */}
+              
               <Typography
                 variant="h6"
                 color="black"
