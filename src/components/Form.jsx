@@ -1,5 +1,19 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import {
+  DndContext,
+  closestCenter,
+  MouseSensor,
+  TouchSensor,
+  DragOverlay,
+  useSensor,
+  useSensors,
+  useSortable,
+  SortableContext,
+  Sortable,
+  useDraggable,
+  useDroppable,
+} from '@dnd-kit/core';
+import { useSortable as useMUISortable } from '@dnd-kit/sortable';
 import {
   TextField,
   Button,
@@ -27,17 +41,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import {
-  DndContext,
-  closestCorners,
-  MouseSensor,
-  TouchSensor,
-  DragOverlay,
-  useSensor,
-  useSensors,
-  useDraggable,
-} from '@dnd-kit/core';
-import { useSortable } from '@dnd-kit/sortable';
 
 const theme = createTheme({
   palette: {
@@ -50,39 +53,67 @@ const theme = createTheme({
   },
 });
 
-const DraggableListItem = ({ text, isDragging }) => {
-  const { attributes, listeners, setNodeRef } = useSortable({ id: text });
-
-  const style = {
-    transform: translate(0, 0),
-    opacity: isDragging ? 0.5 : 1,
-  };
+const DraggableHeading = () => {
+  const { attributes, listeners, setNodeRef } = useMUISortable({ id: 'Heading' });
 
   return (
-    <ListItem ref={setNodeRef} style={style} {...attributes} {...listeners} disablePadding>
-      <ListItemButton>
-        <ListItemIcon>
-          {text === 'Heading' ? <SendIcon /> : text === 'Full Name' ? <InboxIcon /> : <MailIcon />}
-        </ListItemIcon>
-        <ListItemText primary={text} />
-      </ListItemButton>
-    </ListItem>
+    <Sortable ref={setNodeRef} {...attributes} {...listeners}>
+      <Typography variant="h6" color="black" gutterBottom>
+        Heading
+      </Typography>
+    </Sortable>
   );
 };
 
-const DraggableFormList = () => {
-  const { items, setNodeRef, attributes, listeners } = useSortable({ id: 'form-list' });
+const DraggableFullName = () => {
+  const { attributes, listeners, setNodeRef } = useMUISortable({ id: 'Full Name' });
 
   return (
-    <List ref={setNodeRef} {...attributes} {...listeners}>
-      {items.map(({ id, data: text, isDragging }) => (
-        <ListItem key={id} disablePadding>
-          <DraggableListItem text={text} isDragging={isDragging} />
-        </ListItem>
-      ))}
-    </List>
+    <Sortable ref={setNodeRef} {...attributes} {...listeners}>
+      <Typography variant="h6" color="black" gutterBottom>
+        Full Name
+      </Typography>
+    </Sortable>
   );
 };
+
+const DraggableEmail = () => {
+  const { attributes, listeners, setNodeRef } = useMUISortable({ id: 'Email' });
+
+  return (
+    <Sortable ref={setNodeRef} {...attributes} {...listeners}>
+      <Typography variant="h6" color="black" gutterBottom>
+        Email
+      </Typography>
+    </Sortable>
+  );
+};
+
+const DraggableAddress = () => {
+  const { attributes, listeners, setNodeRef } = useMUISortable({ id: 'Address' });
+
+  return (
+    <Sortable ref={setNodeRef} {...attributes} {...listeners}>
+      <Typography variant="h6" color="black" gutterBottom>
+        Address
+      </Typography>
+    </Sortable>
+  );
+};
+
+const DraggablePhone = () => {
+  const { attributes, listeners, setNodeRef } = useMUISortable({ id: 'Phone' });
+
+  return (
+    <Sortable ref={setNodeRef} {...attributes} {...listeners}>
+      <Typography variant="h6" color="black" gutterBottom>
+        Phone
+      </Typography>
+    </Sortable>
+  );
+};
+
+
 
 const Form = () => {
   const {
@@ -90,6 +121,8 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  
 
   const [selectedOption, setSelectedOption] = useState('');
   const [value, setValue] = React.useState(new Date());
@@ -159,13 +192,18 @@ const Form = () => {
     id: 'form-draggable',
   });
 
+  const { attributes: formAttributes, listeners: formListeners, setNodeRef: formSetNodeRef } =
+    useSortable({ id: 'form-draggable' });
+  
+
   return (
     <DndContext
-      sensors={useSensors(sensor)}
-      collisionDetection={closestCorners}
+      sensors={useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 10 } }), TouchSensor)}
+      collisionDetection={closestCenter}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
+    
       <ThemeProvider theme={theme}>
         <Box
           sx={{
